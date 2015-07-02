@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<div data-bb-type="screen">
+	<div id="events" data-bb-type="image-list" data-bb-header-justify="center" data-bb-images="none" data-role="listview" >
+		
+	</div>
+	<div data-bb-type="menu">
+		<div data-bb-type="menu-item" data-bb-img="static/images/ic_settings.png" data-bb-pin="right" onclick="bb.pushScreen('settings.html', 'settings')">Settings</div>
+		<div data-bb-type="menu-item" data-bb-img="static/images/ic_help.png" data-bb-pin="left" onclick="bb.pushScreen('about.html', 'about');">About</div>
+	</div>
+	<div data-bb-type="action-bar">
+		<div data-bb-type="action" data-bb-style="button" data-bb-img="static/images/ic_add.png" onclick="addEvent()">Add Event</div>
+		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="static/images/ic_delete.png" onclick="removeEvents()">Remove Events</div>
+		<div onclick="bbm.inviteToDownload();" id="btnB" data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="static/images/ic_bbm.png">Invite To Download</div>
+	</div>	
+</div>
+
+<!-- SCRIPTS SECTION -->
+<script type="text/javascript">
+function appendEvents(){
+	var events = Event.all().order(localStorage.getItem('order'),true);
+	events.list(null, 
+		function (results) {
+			var items = [];
+			if(results.length > 0){
+				results.forEach(
+					function (r) {
+						var header = document.createElement('div');
+						header.setAttribute('data-bb-type', 'header');
+						header.innerHTML = moment(r.date).format(localStorage.getItem('dateFormat'));
+						items.push(header);
+
+						var item = document.createElement('div');
+						item.setAttribute('style', "text-align:center");
+						item.setAttribute('id', r.id);
+						item.setAttribute('data-bb-type','item');
+						item.setAttribute('data-bb-title',r.name);
+						item.innerHTML = "Time Left: "+timeLeft(r.date);
+						item.onclick = function() {bb.pushScreen('event.html', 'event',{'id': r.id, 'name': r.name, 'date': r.date});};
+						items.push(item);						
+					}
+					);
+				document.getElementById('events').refresh(items);
+			}
+			else{
+				var item = document.createElement('div');
+				item.setAttribute('data-bb-type','label');		
+				item.innerHTML = "No events added...yet!";
+				document.getElementById('events').appendItem(item);
+			}
+		}
+		);
+}
+
+function addEvent(){
+	bb.pushScreen('new_event.html', 'newEvent',{});
+}
+function removeEvents(){
+	bb.pushScreen('remove_events.html', 'removeEvents', {});
+}
+
+</script>

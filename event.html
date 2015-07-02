@@ -1,0 +1,37 @@
+<div data-bb-type="screen" data-bb-effect="slide-left">
+	<div id="id" style="display:none" ></div>
+	<div data-bb-type="round-panel">
+		<div data-bb-type="panel-header">Event Details</div>
+		<p>Name: <span id="name"></span></p>
+		<p>Date: <span id="date"></span><input type="hidden" id="datejs"/></p>
+		<p>Time Left: <span id="timeleft"></span></p>
+	</div>
+	<div data-bb-type="action-bar" data-bb-back-caption="Back">
+		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="static/images/ic_edit.png" onclick="editEvent()">Edit this event</div>
+		<div data-bb-type="action" data-bb-style="button" data-bb-overflow="true" data-bb-img="static/images/ic_delete.png" onclick="deleteEvent()">Remove this event</div>	
+	</div>	
+</div>
+
+<!-- SCRIPTS SECTION -->
+
+<script type="text/javascript">
+	function addParams(id, name, date){
+		document.getElementById('id').innerHTML = id;
+		document.getElementById('name').innerHTML = name;
+		document.getElementById('date').innerHTML = moment(date).format(localStorage.getItem('dateFormat'));;
+		document.getElementById('timeleft').innerHTML = timeLeft(date);
+	}
+
+	function editEvent(){
+		var id = document.getElementById('id').innerHTML;
+		var name = document.getElementById('name').innerHTML;
+		var date = document.getElementById('date').innerHTML;
+		bb.pushScreen('new_event.html', 'editEvent', {'id': id, 'name': name, 'date': date});
+		
+	}
+
+	function deleteEvent(){
+		var id = document.getElementById('id').innerText;
+		removeEvent(id,true);
+	}
+</script>

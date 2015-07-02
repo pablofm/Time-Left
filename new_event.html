@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<div data-bb-type="screen" data-bb-effect="slide-left">
+	<div id="id" style="display:none" ></div>
+	<div id="events" data-bb-type="image-list" data-bb-header-justify="left" data-bb-style="removebuttons" data-bb-images="none" data-role="listview" >
+		<div data-bb-type="header">New Event</div>
+	</div>
+	<div data-bb-type="label">Event Name:</div>
+	<input id="eventName" type="text"/>
+	<div data-bb-type="label">Date:</div>
+	<input id="date" type="datetime-local"/>
+	
+	<div data-bb-type="action-bar" data-bb-back-caption="Back">
+		<div data-bb-type="action" data-bb-style="button" data-bb-img="static/images/ic_save.png" onclick="save()">Save</div>
+	</div>	
+</div>
+
+<!-- SCRIPTS SECTION -->
+<script type="text/javascript">
+
+	function populateParams(id, name, date){
+		document.getElementById('id').innerHTML = id;
+		document.getElementById('eventName').value = name;
+		document.getElementById('date').innerHTML = moment(date).format("YYYY-MM-DDTHH:mm");
+	}
+
+	function save(){
+		var id = document.getElementById('id').innerText;
+		var name = document.getElementById('eventName').value;
+		var date = new Date();
+		
+		var date_time = document.getElementById('date').value.split("T");
+		var date_provided = date_time[0].split("-");
+		var time_provided = date_time[1].split(":");
+
+		var day = date_provided[2];
+		var month = date_provided[1];
+		var year = date_provided[0];
+		var hour = time_provided[0];
+		var minutes = time_provided[1];
+
+		date.setFullYear(year);
+		date.setMonth(month-1); // MONTHS STARTS IN 0
+		date.setDate(day);
+		date.setHours(hour);
+		date.setMinutes(minutes);
+		storeEvent(name,date, id);
+	}
+
+</script>
